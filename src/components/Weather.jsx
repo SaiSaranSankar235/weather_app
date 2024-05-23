@@ -21,10 +21,25 @@ const WeatherApp = () => {
             const response = await axios.get(
                 `https://api.openweathermap.org/data/2.5/forecast?q=${enteredCity}&appid=${apiKey}`
             );
-            if (response?.data?.cod === "200") {
-                setForecast(response?.data?.list?.slice(0, 5));
-                setError(null);
-            }
+
+            //...........................sort data
+            const sortedData = response?.data?.list
+                ?.map((item) => {
+                    return {
+                        ...item,
+                        dt_txt: new Date(item.dt_txt).toLocaleDateString(),
+                    };
+                })
+                .sort((a, b) => a.dt_txt.localeCompare(b.dt_txt));
+
+            //fetch unique date info since response have duplicate dates info
+            const lastFiveDays = [
+                ...new Map(
+                    sortedData.map((item) => [item.dt_txt, item])
+                ).values(),
+            ];
+            setForecast(lastFiveDays.slice(0, 5));
+            setError(null);
         } catch (err) {
             setError("Forecast not available , Enter valid city name");
             setForecast(null);
@@ -33,6 +48,8 @@ const WeatherApp = () => {
             setLoading(false);
         }
     };
+
+    //..............................default as vizag weather
 
     useEffect(() => {
         getForecast();
