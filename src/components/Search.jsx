@@ -4,8 +4,9 @@ const Search = ({ city, setCity, getForecast }) => {
     return (
         <div className="flex flex-col items-center w-full justify-between p-4  m-5 md:flex-row">
             <h1 className="text-[30px] font-bold mb-8 text-blue-700 text-center ml-5">
-                Weather in your city
+                Weather in your City
             </h1>
+           
             <div className="flex flex-col sm:flex-row mb-4">
                 <input
                     type="text"

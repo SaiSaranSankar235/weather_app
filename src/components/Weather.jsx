@@ -1,11 +1,11 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import axios from "axios";
 import Card from "./Card";
 import SearchCity from "./Search";
 import Loader from "./Loader";
 
 const WeatherApp = () => {
-    const [city, setCity] = useState("");
+    const [city, setCity] = useState("visakhapatnam");
     const [forecast, setForecast] = useState(null);
     const [error, setError] = useState(null);
     const [loading, setLoading] = useState(false);
@@ -23,17 +23,21 @@ const WeatherApp = () => {
             );
             if (response?.data?.cod === "200") {
                 setForecast(response?.data?.list?.slice(0, 5));
-                setCity(response?.data?.city?.name);
-                setCity("");
                 setError(null);
             }
         } catch (err) {
-            setError("Forecast not available , Check the city name");
+            setError("Forecast not available , Enter valid city name");
             setForecast(null);
+            setCity("");
         } finally {
             setLoading(false);
         }
     };
+
+    useEffect(() => {
+        getForecast();
+        // eslint-disable-next-line react-hooks/exhaustive-deps
+    }, []);
 
     //.....................................................................................jsx
 
